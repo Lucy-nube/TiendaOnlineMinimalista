@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="background: white; padding: 40px; border-radius: 4px; display: flex; gap: 40px;">
+    <div style="flex: 1; text-align: center;">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" style="max-width: 100%; max-height: 500px;">
+        {% endif %}
+    </div>
+    <div style="flex: 1;">
+        <h1 style="font-size: 1.5em; font-weight: 400; margin-bottom: 10px;">{{ product.name }}</h1>
+        <p style="color: #007185; font-size: 0.9em; margin-bottom: 20px;">Marca: Minima Store</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 20px;">
+        <p style="font-size: 1.8em; font-weight: 300; margin-bottom: 20px;">{{ product.price }}€</p>
+        <p style="font-size: 0.9em; line-height: 1.6; margin-bottom: 30px;">{{ product.description }}</p>
+        
+        <!-- Formulario para añadir al carrito -->
+        <form action="{% url 'product:cart_add' product.id %}" method="post" style="margin-top: 25px;">
+    {% csrf_token %}
+    
+    <!-- Selector de cantidad estilo Amazon -->
+    <div style="margin-bottom: 15px;">
+        <label style="font-size: 11px; text-transform: uppercase; color: #666; letter-spacing: 1px;">Cantidad:</label>
+        <select name="quantity" style="padding: 5px 10px; border-radius: 4px; border: 1px solid #ddd; font-size: 12px; margin-left: 10px;">
+            {% for i in "12345"|make_list %}
+                <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Botón Real de Submit (sin enlaces dentro) -->
+    <button type="submit" 
+            style="width: 100%; 
+                   background: #ffd814; 
+                   border: 1px solid #fcd200; 
+                   padding: 12px; 
+                   border-radius: 20px; 
+                   cursor: pointer; 
+                   font-size: 13px; 
+                   font-weight: 600; 
+                   color: #111;
+                   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                   transition: 0.2s;">
+        Añadir a la cesta
+    </button>
+</form>
+
+    </div>
+</div>
+{% endblock %}

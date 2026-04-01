@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="display: flex; gap: 25px; align-items: flex-start; max-width: 1100px; margin: 0 auto;">
+    
+    <!-- Productos -->
+    <div style="flex: 3; background: white; padding: 25px; border-radius: 4px; border: 1px solid #ddd;">
+        <h1 style="font-size: 1.5em; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px;">Tu Cesta</h1>
+        
+        {% for item in cart %}
+            <div style="display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid #eee;">
+                <img src="{{ item.product.image.url }}" style="width: 100px; height: 100px; object-fit: contain;">
+                
+                <div style="flex: 1;">
+                    <h3 style="font-size: 1.1em; font-weight: 500;">{{ item.product.name }}</h3>
+                    <p style="color: #007600; font-size: 0.8em; margin: 5px 0;">En stock</p>
+                    
+                    <!-- BOTONES SUMAR/RESTAR -->
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px;">
+                        <a href="{% url 'product:cart_remove' item.product.id %}" style="text-decoration:none; background:#f0f2f2; border:1px solid #d5d9d9; padding:2px 10px; border-radius:4px; color:#111;">-</a>
+                        <span style="font-size: 0.9em;">Cantidad: <strong>{{ item.quantity }}</strong></span>
+                        <a href="{% url 'product:cart_add' item.product.id %}" style="text-decoration:none; background:#f0f2f2; border:1px solid #d5d9d9; padding:2px 10px; border-radius:4px; color:#111;">+</a>
+                    </div>
+                </div>
+                
+                <div style="text-align: right;">
+                    <p style="font-size: 1.2em; font-weight: 700;">{{ item.total_price }}€</p>
+                </div>
+            </div>
+        {% empty %}
+            <p style="padding: 20px 0;">Tu cesta está vacía. <a href="{% url 'product:product_list' %}" style="color:#007185;">Volver a la tienda</a></p>
+        {% endfor %}
+    </div>
+
+    <!-- Caja de Pago -->
+    <div style="flex: 1; background: white; padding: 20px; border-radius: 4px; border: 1px solid #ddd;">
+        <p style="font-size: 1.1em; margin-bottom: 20px;">Subtotal ({{ cart|length }} productos): <strong>{{ cart.get_total_price }}€</strong></p>
+        
+        <!-- EL BOTÓN QUE AHORA SÍ FUNCIONA -->
+        <a href="{% url 'product:checkout' %}" style="text-decoration: none;">
+            <button style="background: #ffd814; border: 1px solid #fcd200; width: 100%; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #111;">
+                Tramitar pedido
+            </button>
+        </a>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="text-align: center; background: white; padding: 60px; border-radius: 4px; border: 1px solid #ddd; max-width: 600px; margin: 40px auto;">
+    <h1 style="color: #007600; font-size: 2em; margin-bottom: 20px;">¡Pedido Realizado!</h1>
+    <p style="font-size: 1.1em; color: #333; margin-bottom: 30px;">Gracias por tu compra en Minima Store. Hemos recibido tu pedido correctamente.</p>
+    <a href="{% url 'product:product_list' %}" style="display: inline-block; background: #ffd814; border: 1px solid #fcd200; padding: 10px 30px; border-radius: 8px; text-decoration: none; color: #111; font-weight: 600;">
+        Volver a la tienda
+    </a>
+</div>
+{% endblock %}

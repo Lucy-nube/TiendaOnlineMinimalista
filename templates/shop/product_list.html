@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- 1. Título del Buscador (Si existe búsqueda) -->
+    {% if query %}
+        <h2 style="font-size: 1.1em; margin-bottom: 25px; font-weight: 400; color: #555;">
+            Resultados para "<strong style="color: #111;">{{ query }}</strong>"
+        </h2>
+    {% endif %}
+
+    <!-- 2. Rejilla de Productos (Unifica aquí tu diseño de tarjetas) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+        {% for product in products %}
+            <div style="background: white; padding: 15px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                <a href="{% url 'product:product_detail' product.id product.slug %}" style="text-decoration: none; color: inherit;">
+                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        {% endif %}
+                    </div>
+                    <h3 style="font-size: 0.9em; font-weight: 400; margin-bottom: 5px; height: 40px; overflow: hidden;">{{ product.name }}</h3>
+                    <p style="font-size: 1.2em; font-weight: 700; color: #111;">{{ product.price }}€</p>
+                    <p style="font-size: 0.8em; color: #007600; margin-top: 5px;">Envío GRATIS</p>
+                </a>
+            </div>
+        {% empty %}
+            <p style="grid-column: 1/-1; text-align: center; padding: 50px; color: #666;">
+                No se encontraron productos.
+            </p>
+        {% endfor %}
+    </div>
+{% endblock %}

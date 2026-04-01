@@ -1,0 +1,12 @@
+<div style="flex: 1; background: white; padding: 20px; border-radius: 4px; border: 1px solid #ddd;">
+    <p style="font-size: 1.1em; margin-bottom: 20px;">
+        Subtotal ({{ cart|length }} productos): <strong>{{ cart.get_total_price }}€</strong>
+    </p>
+    
+    <!-- Añadimos el enlace manteniendo tu estilo exacto de botón -->
+    <a href="{% url 'product:success' %}" style="text-decoration: none;">
+        <button style="background: #ffd814; border: 1px solid #fcd200; width: 100%; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #111;">
+            Tramitar pedido
+        </button>
+    </a>
+</div>

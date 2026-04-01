@@ -1,0 +1,259 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Minima Store{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Minima Store{% endblock %}</title>
+    
+    <!-- ETIQUETAS PARA QUE EL LINK SE VEA BIEN (OPEN GRAPH) -->
+    <meta property="og:title" content="Minima Store | Tu Tienda Online">
+    <meta property="og:description" content="Proyecto Django - Tienda minimalista creada por [TU NOMBRE]">
+    <meta property="og:image" content="{% static 'images/logo_preview.png' %}"> <!-- O un link a una imagen tuya -->
+    <meta property="og:url" content="https://onrender.com">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Minima Store">
+    <meta name="twitter:description" content="Proyecto ecommerce en Django">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    ...
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS FUSIONADO */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            background: #232f3e;
+            color: #fff;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 12px 40px;
+            background: #131921;
+            color: white;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #fff; /* Blanco para un look más minimalista */
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .logo span { color: #febd69; } /* El punto de color */
+
+        /* SEARCH */
+        .search {
+            flex: 1;
+            display: flex;
+        }
+
+        .search input {
+            width: 100%;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+
+        .search button {
+            padding: 10px 20px;
+            background: #febd69;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .search button:hover { background: #f3a847; }
+
+        /* USER & CART */
+        .user-area {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-size: 0.9em;
+        }
+
+        .user-area a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .user-area a:hover { opacity: 0.8; }
+
+        .cart {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #232f3e;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+
+        /* SUBNAV */
+        .subnav {
+            display: flex;
+            gap: 25px;
+            padding: 10px 40px;
+            background: #232f3e;
+            border-bottom: 1px solid #3a4553;
+        }
+
+        .subnav a {
+            color: #eee;
+            text-decoration: none;
+            font-size: 0.85em;
+            font-weight: 400;
+        }
+
+        .subnav a:hover { color: white; }
+
+        /* MAIN */
+        .main {
+            padding: 40px;
+            background: #f6f6f6;
+            min-height: 80vh;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #131921;
+            color: white;
+            padding: 50px 40px 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 1000px;
+            margin: 0 auto 40px;
+        }
+
+        .footer h4 {
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #febd69;
+        }
+
+        .footer p {
+            font-size: 0.85em;
+            color: #ccc;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .footer p:hover { color: white; }
+
+        .copy {
+            text-align: center;
+            font-size: 0.8em;
+            opacity: 0.5;
+            border-top: 1px solid #232f3e;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="topbar">
+    Envío gratis en pedidos superiores a 50€
+</div>
+
+<header class="header">
+    <!-- Ajustado a tu app 'product' -->
+    <a href="{% url 'product:product_list' %}" class="logo">MINIMA<span>.</span></a>
+
+    <form action="{% url 'product:product_list' %}" method="GET" class="search">
+        <input type="text" name="query" placeholder="Buscar en Minima Store...">
+        <button type="submit">Buscar</button>
+    </form>
+
+    <div class="user-area">
+        {% if user.is_authenticated %}
+            <span>Hola, <strong>{{ user.username }}</strong></span>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" style="background:none; border:none; color:white; cursor:pointer; font-size:1em;">Salir</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Mi Cuenta</a>
+        {% endif %}
+
+        <a href="{% url 'product:cart_detail' %}" class="cart">
+         Bolsa <span>({{ cart|length }})</span>
+        </a>
+    </div>
+</header>
+
+<nav class="subnav">
+    <a href="{% url 'product:product_list' %}">Todo</a>
+   <a href="{% url 'product:category_detail' 'electronica' %}">Electronica</a>
+    <a href="{% url 'product:category_detail' 'moda' %}">Moda</a>
+    <a href="{% url 'product:category_detail' 'gaming' %}">Gaming</a>
+    <a href="{% url 'product:ofertas' %}">Ofertas</a>
+     <a href="{% url 'product:servicio_cliente' %}">Servicio al Cliente</a>
+</nav>
+
+<main class="main">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="footer-grid">
+        <div>
+            <h4>Conócenos</h4>
+            <p>Sobre Minima</p>
+            <p>Sostenibilidad</p>
+            <p>Prensa</p>
+        </div>
+
+        <div>
+            <h4>Ayuda</h4>
+            <p>Tus Pedidos</p>
+            <p>Tarifas de Envío</p>
+            <p>Devoluciones</p>
+        </div>
+
+        <div>
+            <h4>Métodos de Pago</h4>
+            <p>Tarjetas de Crédito</p>
+            <p>PayPal</p>
+            <p>Cheques Regalo</p>
+        </div>
+    </div>
+
+    <p class="copy">© 2026 Minima Store - Proyecto Django</p>
+</footer>
+
+</body>
+</html>
