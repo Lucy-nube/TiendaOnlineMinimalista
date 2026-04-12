@@ -122,11 +122,21 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 # WhiteNoise (mejor rendimiento en Render)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # CART
 CART_SESSION_ID = 'cart'
 
-print("STORAGE:", DEFAULT_FILE_STORAGE)
+# STATIC FILES
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Añade esta línea:
+MEDIA_URL = '/media/' 
