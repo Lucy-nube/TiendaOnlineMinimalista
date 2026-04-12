@@ -128,3 +128,5 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # CART
 CART_SESSION_ID = 'cart'
+
+print("STORAGE:", DEFAULT_FILE_STORAGE)
