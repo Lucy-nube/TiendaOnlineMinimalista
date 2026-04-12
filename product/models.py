@@ -1,21 +1,15 @@
 from io import BytesIO
 from PIL import Image
-
 from django.core.files import File
 from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
-
     class Meta:
         ordering = ('name',)
-    
     def __str__(self):
         return self.name
-    
-    def get_absolute_url(self):
-        return f'/{self.slug}/'
 
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
@@ -29,42 +23,27 @@ class Product(models.Model):
 
     class Meta:
         ordering = ('-date_added',)
-    
+
     def __str__(self):
         return self.name
-    
-    def get_absolute_url(self):
-        return f'/{self.category.slug}/{self.slug}/'
-    
-    # CORRECCIÓN: Usar .url directamente para que Cloudinary genere la ruta correcta
+
+    # Sobreescribimos el método save para generar el thumbnail una sola vez
+    def save(self, *args, **kwargs):
+        if self.image and not self.thumbnail:
+            self.thumbnail = self.make_thumbnail(self.image)
+        super().save(*args, **kwargs)
+
     def get_image(self):
-        if self.image:
-            return self.image.url
-        return ''
-    
-    # CORRECCIÓN: Eliminamos la IP local para que funcione en cualquier servidor
+        return self.image.url if self.image else ''
+
     def get_thumbnail(self):
-        if self.thumbnail:
-            return self.thumbnail.url
-        else:
-            if self.image:
-                self.thumbnail = self.make_thumbnail(self.image)
-                self.save()
-                return self.thumbnail.url
-            else:
-                return ''
-    
+        return self.thumbnail.url if self.thumbnail else (self.image.url if self.image else '')
+
     def make_thumbnail(self, image, size=(300, 200)):
         img = Image.open(image)
-        # Asegurar compatibilidad de formato
-        if img.mode in ("RGBA", "P"):
+        if img.mode != 'RGB':
             img = img.convert('RGB')
-        
         img.thumbnail(size)
-
         thumb_io = BytesIO()
         img.save(thumb_io, 'JPEG', quality=85)
-
-        thumbnail = File(thumb_io, name=image.name)
-
-        return thumbnail
+        return File(thumb_io, name=image.name)
