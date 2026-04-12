@@ -13,6 +13,9 @@ class Category(models.Model):
         
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return f'/{self.slug}/'
 
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
@@ -29,9 +32,12 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return f'/{self.category.slug}/{self.slug}/'
 
     def save(self, *args, **kwargs):
-        # Solo generamos el thumbnail si hay imagen y no existe uno previo
+        # Si hay imagen pero no thumbnail, lo creamos antes de guardar
         if self.image and not self.thumbnail:
             self.thumbnail = self.make_thumbnail(self.image)
         super().save(*args, **kwargs)
@@ -45,27 +51,26 @@ class Product(models.Model):
         if self.thumbnail:
             return self.thumbnail.url
         if self.image:
-            # Si falla el thumbnail, devolvemos la imagen original por seguridad
             return self.image.url
         return ''
 
     def make_thumbnail(self, image, size=(300, 200)):
-        # Abrir la imagen desde el almacenamiento (Cloudinary)
+        # Abrir imagen
         img = Image.open(image)
         
-        # Convertir a RGB (necesario para JPEG)
+        # Forzar modo RGB para evitar errores de transparencia en JPEG
         if img.mode != 'RGB':
             img = img.convert('RGB')
             
         img.thumbnail(size)
         
-        # Guardar en memoria
+        # Guardar en memoria técnica BytesIO
         thumb_io = BytesIO()
         img.save(thumb_io, 'JPEG', quality=85)
         
-        # Obtener el nombre base sin rutas ni extensiones extrañas
+        # Limpiar el nombre: quitar ruta y asegurar extensión .jpg única
         original_name = os.path.basename(image.name)
-        # Separamos nombre de extensión y forzamos .jpg
-        clean_name = os.path.splitext(original_name)[0] + ".jpg"
+        name_only = os.path.splitext(original_name)[0]
+        clean_name = f"{name_only}_thumb.jpg"
         
         return ContentFile(thumb_io.getvalue(), name=clean_name)
