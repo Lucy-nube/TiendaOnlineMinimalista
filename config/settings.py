@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import dj_database_url
+import cloudinary
 
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,6 +35,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'djoser',
+    'cloudinary',
+    'cloudinary_storage',
 
     # Apps
     'accounts',
@@ -99,6 +102,12 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dgk4a9xnk',
+    'API_KEY': '644265433378755',
+    'API_SECRET': 'htQnHpQ1L0aWa8YvBSM-45ImvCk',
+}
+
 # INTERNATIONALIZATION
 LANGUAGE_CODE = 'es-es'
 TIME_ZONE = 'UTC'
@@ -109,11 +118,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-MEDIA_ROOT = '/opt/render/project/src/media'
-MEDIA_URL = '/media/'
 
 # WhiteNoise (mejor rendimiento en Render)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # CART
 CART_SESSION_ID = 'cart'
