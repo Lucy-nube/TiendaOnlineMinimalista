@@ -110,6 +110,14 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': 'htQnHpQ1L0aWa8YvBSM-45ImvCk',
 }
 
+import cloudinary
+cloudinary.config(
+    cloud_name = CLOUDINARY_STORAGE['CLOUD_NAME'],
+    api_key = CLOUDINARY_STORAGE['API_KEY'],
+    api_secret = CLOUDINARY_STORAGE['API_SECRET'],
+    secure = True
+)
+
 # INTERNATIONALIZATION
 LANGUAGE_CODE = 'es-es'
 TIME_ZONE = 'UTC'
@@ -135,4 +143,5 @@ STORAGES = {
 
 # CART
 CART_SESSION_ID = 'cart'
+CSRF_TRUSTED_ORIGINS = ['https://onrender.com']
 

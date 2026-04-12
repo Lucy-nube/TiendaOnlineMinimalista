@@ -48,21 +48,18 @@ class Product(models.Model):
         return ''
 
     def make_thumbnail(self, image, size=(300, 200)):
-        # Abrimos la imagen original
         img = Image.open(image)
-        
-        # Convertimos a RGB para evitar errores con archivos PNG o nombres extraños
         if img.mode != 'RGB':
             img = img.convert('RGB')
-            
         img.thumbnail(size)
         
-        # Guardamos el resultado en memoria
         thumb_io = BytesIO()
         img.save(thumb_io, 'JPEG', quality=85)
         
-        # Creamos un archivo de contenido para Django
-        name = image.name.replace('uploads/', '') # Limpiamos el nombre
-        thumbnail = ContentFile(thumb_io.getvalue(), name=name)
+        # LIMPIEZA DE NOMBRE: Asegura que no termine en punto
+        import os
+        original_name = os.path.basename(image.name)
+        clean_name = os.path.splitext(original_name)[0] + ".jpg"
         
-        return thumbnail
+        return ContentFile(thumb_io.getvalue(), name=clean_name)
+
