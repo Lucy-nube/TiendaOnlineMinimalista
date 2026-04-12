@@ -11,7 +11,5 @@ urlpatterns = [
     path('api/v1/', include('djoser.urls.authtoken')),
 ]
 
-
-if settings.MEDIA_URL and settings.MEDIA_ROOT:
+if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

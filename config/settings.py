@@ -134,9 +134,3 @@ STORAGES = {
 # CART
 CART_SESSION_ID = 'cart'
 
-# STATIC FILES
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Añade esta línea:
-MEDIA_URL = '/media/' 

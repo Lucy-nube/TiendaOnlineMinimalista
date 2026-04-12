@@ -4,9 +4,6 @@ from PIL import Image
 from django.core.files import File
 from django.db import models
 
-
-# Create your models here.
-
 class Category(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField()
@@ -39,26 +36,30 @@ class Product(models.Model):
     def get_absolute_url(self):
         return f'/{self.category.slug}/{self.slug}/'
     
+    # CORRECCIÓN: Usar .url directamente para que Cloudinary genere la ruta correcta
     def get_image(self):
         if self.image:
-            return 'http://127.0.0.1:8000' + self.image.url
+            return self.image.url
         return ''
     
+    # CORRECCIÓN: Eliminamos la IP local para que funcione en cualquier servidor
     def get_thumbnail(self):
         if self.thumbnail:
-            return 'http://127.0.0.1:8000' + self.thumbnail.url
+            return self.thumbnail.url
         else:
             if self.image:
                 self.thumbnail = self.make_thumbnail(self.image)
                 self.save()
-
-                return 'http://127.0.0.1:8000' + self.thumbnail.url
+                return self.thumbnail.url
             else:
                 return ''
     
     def make_thumbnail(self, image, size=(300, 200)):
         img = Image.open(image)
-        img.convert('RGB')
+        # Asegurar compatibilidad de formato
+        if img.mode in ("RGBA", "P"):
+            img = img.convert('RGB')
+        
         img.thumbnail(size)
 
         thumb_io = BytesIO()
