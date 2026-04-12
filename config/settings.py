@@ -32,13 +32,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # APIs
+    # APIs y Almacenamiento (Cloudinary storage debe ir antes de cloudinary)
+    'cloudinary_storage',
+    'cloudinary',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
     'djoser',
-    'cloudinary',
-    'cloudinary_storage',
 
     # Apps
     'accounts',
@@ -49,10 +49,8 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Debe ir después de Security
     'corsheaders.middleware.CorsMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -96,6 +94,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
 ]
 
+# CSRF - Importante para evitar error 403/500 en Render
+CSRF_TRUSTED_ORIGINS = [
+    'https://tareadjango.onrender.com',
+    'https://*.onrender.com'
+]
+
 # PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -104,13 +108,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# CLOUDINARY CONFIG
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dgk4a9xnk',
     'API_KEY': '644265433378755',
     'API_SECRET': 'htQnHpQ1L0aWa8YvBSM-45ImvCk',
 }
 
-import cloudinary
 cloudinary.config(
     cloud_name = CLOUDINARY_STORAGE['CLOUD_NAME'],
     api_key = CLOUDINARY_STORAGE['API_KEY'],
@@ -127,21 +131,20 @@ USE_TZ = True
 # STATIC FILES
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# MEDIA FILES
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
-# WhiteNoise (mejor rendimiento en Render)
+# STORAGE CONFIG
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.StaticFilesStorage", # Simplificado para evitar errores de manifiesto
     },
 }
 
 # CART
 CART_SESSION_ID = 'cart'
-CSRF_TRUSTED_ORIGINS = ['https://onrender.com']
-

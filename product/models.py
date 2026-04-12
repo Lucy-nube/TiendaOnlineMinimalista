@@ -1,3 +1,4 @@
+import os
 from io import BytesIO
 from PIL import Image
 from django.core.files.base import ContentFile
@@ -30,7 +31,7 @@ class Product(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        # Generar thumbnail solo si hay imagen y no existe el thumbnail aún
+        # Solo generamos el thumbnail si hay imagen y no existe uno previo
         if self.image and not self.thumbnail:
             self.thumbnail = self.make_thumbnail(self.image)
         super().save(*args, **kwargs)
@@ -44,22 +45,27 @@ class Product(models.Model):
         if self.thumbnail:
             return self.thumbnail.url
         if self.image:
+            # Si falla el thumbnail, devolvemos la imagen original por seguridad
             return self.image.url
         return ''
 
     def make_thumbnail(self, image, size=(300, 200)):
+        # Abrir la imagen desde el almacenamiento (Cloudinary)
         img = Image.open(image)
+        
+        # Convertir a RGB (necesario para JPEG)
         if img.mode != 'RGB':
             img = img.convert('RGB')
+            
         img.thumbnail(size)
         
+        # Guardar en memoria
         thumb_io = BytesIO()
         img.save(thumb_io, 'JPEG', quality=85)
         
-        # LIMPIEZA DE NOMBRE: Asegura que no termine en punto
-        import os
+        # Obtener el nombre base sin rutas ni extensiones extrañas
         original_name = os.path.basename(image.name)
+        # Separamos nombre de extensión y forzamos .jpg
         clean_name = os.path.splitext(original_name)[0] + ".jpg"
         
         return ContentFile(thumb_io.getvalue(), name=clean_name)
-
