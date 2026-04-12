@@ -109,8 +109,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+MEDIA_ROOT = '/opt/render/project/src/media'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media/'
 
 # WhiteNoise (mejor rendimiento en Render)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
