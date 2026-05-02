@@ -110,7 +110,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # CLOUDINARY CONFIG
-
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'mi_tienda_mock_cloud',
+    'API_KEY': '123456789012345',
+    'API_SECRET': 'abcdefghijklmnopqrstuvwxyz012345',
+}
 
 
 cloudinary.config(
