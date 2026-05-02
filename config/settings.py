@@ -110,11 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # CLOUDINARY CONFIG
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dgk4a9xnk',
-    'API_KEY': '644265433378755',
-    'API_SECRET': 'htQnHpQ1L0aWa8YvBSM-45ImvCk',
-}
+
+
 
 cloudinary.config(
     cloud_name = CLOUDINARY_STORAGE['CLOUD_NAME'],
