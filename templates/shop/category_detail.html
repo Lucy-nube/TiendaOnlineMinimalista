@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Minima - {{ category.name }}{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 30px; border-bottom: 1px solid #ddd; padding-bottom: 15px;">
+    <h1 style="font-size: 1.5em; font-weight: 600; color: #333;">
+        Resultados en <span style="color: #c45500;">{{ category.name }}</span>
+    </h1>
+    <p style="font-size: 0.85em; color: #555;">{{ products|length }} productos encontrados</p>
+</div>
+
+<!-- Rejilla de productos (Mismo estilo que el listado principal) -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
+    {% for product in products %}
+    <div style="background: white; padding: 15px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #eee;">
+        <a href="{% url 'product:product_detail' product.id product.slug %}" style="text-decoration: none; color: inherit;">
+            <div style="height: 180px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                {% else %}
+                    <div style="color: #ccc; font-size: 0.8em;">Sin imagen</div>
+                {% endif %}
+            </div>
+            <h3 style="font-size: 0.85em; font-weight: 400; margin-bottom: 5px; height: 35px; overflow: hidden; line-height: 1.4;">
+                {{ product.name }}
+            </h3>
+            <p style="font-size: 1.1em; font-weight: 700; color: #111;">{{ product.price }}€</p>
+            <p style="font-size: 0.75em; color: #007600; margin-top: 5px; font-weight: 600;">Envío GRATIS</p>
+        </a>
+    </div>
+    {% empty %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 50px; background: white; border-radius: 4px;">
+        <p style="color: #666;">No hay productos todavía en esta categoría.</p>
+        <a href="{% url 'product:product_list' %}" style="color: #007185; font-size: 0.9em;">Volver al inicio</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

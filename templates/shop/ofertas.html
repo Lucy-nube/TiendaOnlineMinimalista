@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="background: #b12704; color: white; padding: 20px; border-radius: 4px; margin-bottom: 30px;">
+    <h1 style="font-size: 1.5em; font-weight: 700;">% Ofertas destacadas</h1>
+    <p style="font-size: 0.9em; opacity: 0.9;">Precios mínimos históricos en Minima Store</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
+    {% for product in products %}
+        <div style="background: white; padding: 15px; border-radius: 4px; border: 1px solid #eee;">
+            <a href="{% url 'product:product_detail' product.id product.slug %}" style="text-decoration: none; color: inherit;">
+                <div style="height: 180px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                    {% endif %}
+                </div>
+                <h3 style="font-size: 0.85em; font-weight: 400; height: 35px; overflow: hidden;">{{ product.name }}</h3>
+                <p style="font-size: 1.2em; font-weight: 700; color: #B12704;">{{ product.price }}€</p>
+                <p style="font-size: 0.7em; color: #555; text-decoration: line-through;">{{ product.price|add:10 }}€</p>
+            </a>
+        </div>
+    {% empty %}
+        <p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">
+            Hoy no hay ofertas disponibles. ¡Vuelve mañana!
+        </p>
+    {% endfor %}
+</div>
+{% endblock %}

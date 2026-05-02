@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 40px auto; padding: 0 20px;">
+    
+    <h2 style="margin-bottom: 20px; font-size: 1.8em; font-weight: 700; color: #111;">
+        Finalizar Compra
+    </h2>
+
+    <div style="background: white; padding: 25px; border-radius: 8px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        
+        <p style="font-size: 1.2em; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+            Subtotal ({{ cart|length }} productos): <strong>{{ cart.get_total_price }}€</strong>
+        </p>
+        
+        <!-- Formulario completo que envía los datos a Django -->
+        <form action="{% url 'order:checkout' %}" method="POST">
+            {% csrf_token %}
+            
+            <!-- Datos del Cliente -->
+            <div style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:600; color: #333;">Nombre completo:</label>
+                <input type="text" name="first_name" required style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; font-size: 1em;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:600; color: #333;">Dirección de entrega:</label>
+                <input type="text" name="address" required style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; font-size: 1em;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom:5px; font-weight:600; color: #333;">Teléfono de contacto:</label>
+                <input type="text" name="phone" required style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; font-size: 1em;">
+            </div>
+
+            <!-- Método de Pago -->
+            <div style="margin-bottom: 25px;">
+                <label style="display:block; margin-bottom:5px; font-weight:600; color: #333;">Método de Pago:</label>
+                <select name="payment_method" style="width: 100%; padding: 10px; border-radius: 4px; border: 1px solid #ccc; cursor: pointer; font-size: 1em; background-color: #fff;">
+                    <option value="transferencia">Transferencia Bancaria</option>
+                    <option value="efectivo">Pago contra reembolso</option>
+                    <option value="simulado">Tarjeta de Crédito (Simulado)</option>
+                </select>
+            </div>
+            
+            <button type="submit" style="background: #ffd814; border: 1px solid #fcd200; width: 100%; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #111; font-size: 1.1em; transition: background 0.2s;">
+                Tramitar pedido
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
