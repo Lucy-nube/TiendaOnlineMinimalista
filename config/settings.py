@@ -148,7 +148,7 @@ STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.StaticFilesStorage", # Simplificado para evitar errores de manifiesto
     },
-}
+}   
 
 # CART
 CART_SESSION_ID = 'cart'
