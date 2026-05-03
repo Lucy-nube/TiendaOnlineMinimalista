@@ -110,11 +110,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # CLOUDINARY CONFIG
+from decouple import config
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'mi_tienda_mock_cloud',
-    'API_KEY': '123456789012345',
-    'API_SECRET': 'abcdefghijklmnopqrstuvwxyz012345',
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
+
 
 
 cloudinary.config(
